@@ -14,8 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -euo pipefail
+
+gem install xcov
 xcov --workspace Example/Firebase.xcworkspace --scheme AllUnitTests_iOS --output_directory Metrics --json_report
-pushd Metrics
+cd Metrics
 swift build
-.build/debug/Metrics -c report.json -p 1000
-popd
+.build/debug/Metrics -c report.json -p "${TRAVIS_PULL_REQUEST}"
+cd ..
